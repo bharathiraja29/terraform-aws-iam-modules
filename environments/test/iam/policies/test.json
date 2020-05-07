@@ -1,0 +1,142 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "GrantIAMPassRoleOnlyForEC2",
+            "Action": [
+                "iam:PassRole"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:iam::121819147851:role/njm-test",
+                "arn:aws:iam::121819147851:role/njm-test"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "iam:PassedToService": "ec2.amazonaws.com"
+                }
+            }
+        },
+        {
+            "Sid": "ReadOnlyEC2WithNonResource",
+            "Action": [
+                "ec2:Describe*",
+                "iam:ListInstanceProfiles"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Sid": "ModifyingEC2WithNonResource",
+            "Action": [
+                "ec2:CreateKeyPair",
+                "ec2:CreateSecurityGroup"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Sid": "RunInstancesWithTagRestrictions",
+            "Effect": "Allow",
+            "Action": "ec2:RunInstances",
+            "Resource": [
+                "arn:aws:ec2:us-east-1:121819147851:instance/*",
+                "arn:aws:ec2:us-east-1:121819147851:volume/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestTag/TAG-KEY": "TAG-VALUE"
+                }
+            }
+        },
+        {
+            "Sid": "RemainingRunInstancePermissionsNonResource",
+            "Effect": "Allow",
+            "Action": "ec2:RunInstances",
+            "Resource": [
+                "arn:aws:ec2:us-east-1::image/*",
+                "arn:aws:ec2:us-east-1::snapshot/*",
+                "arn:aws:ec2:us-east-1:121819147851*:network-interface/*",
+                "arn:aws:ec2:us-east-1:121819147851*:key-pair/*",
+                "arn:aws:ec2:us-east-1:121819147851*:security-group/*"
+            ]
+        },
+        {
+            "Sid": "EC2RunInstancesVpcSubnet",
+            "Effect": "Allow",
+            "Action": "ec2:RunInstances",
+            "Resource": "arn:aws:ec2:us-east-1:121819147851:subnet/*",
+            "Condition": {
+                "StringEquals": {
+                    "ec2:Vpc": "arn:aws:ec2:us-east-1:121819147851:vpc/vpc-5e409124"
+                }
+            }
+        },
+        {
+            "Sid": "EC2VpcNonResourceSpecificActions",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DeleteNetworkAcl",
+                "ec2:DeleteNetworkAclEntry",
+                "ec2:DeleteRoute",
+                "ec2:DeleteRouteTable",
+                "ec2:AuthorizeSecurityGroupEgress",
+                "ec2:AuthorizeSecurityGroupIngress",
+                "ec2:RevokeSecurityGroupEgress",
+                "ec2:RevokeSecurityGroupIngress",
+                "ec2:DeleteSecurityGroup",
+                "ec2:CreateNetworkInterfacePermission",
+                "ec2:CreateRoute",
+                "ec2:UpdateSecurityGroupRuleDescriptionsEgress",
+                "ec2:UpdateSecurityGroupRuleDescriptionsIngress"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "ec2:Vpc": "arn:aws:ec2:us-east-1:121819147851:vpc/vpc-5e409124"
+                }
+            }
+        },
+        {
+            "Sid": "AllowInstanceActionsTagBased",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:RebootInstances",
+                "ec2:StopInstances",
+                "ec2:TerminateInstances",
+                "ec2:StartInstances",
+                "ec2:AttachVolume",
+                "ec2:DetachVolume",
+                "ec2:AssociateIamInstanceProfile",
+                "ec2:DisassociateIamInstanceProfile",
+                "ec2:GetConsoleScreenshot",
+                "ec2:ReplaceIamInstanceProfileAssociation"
+            ],
+            "Resource": [
+                "arn:aws:ec2:us-east-1:121819147851:instance/*",
+                "arn:aws:ec2:us-east-1:121819147851:volume/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "ec2:ResourceTag/TAG-KEY": "TAG-VALUE"
+                }
+            }
+        },
+        {
+            "Sid": "AllowCreateTagsOnlyLaunching",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:CreateTags"
+            ],
+            "Resource": [
+                "arn:aws:ec2:us-east-1:121819147851:instance/*",
+                "arn:aws:ec2:us-east-1:121819147851:volume/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "ec2:CreateAction": "RunInstances"
+                }
+            }
+        }
+    ]
+}
