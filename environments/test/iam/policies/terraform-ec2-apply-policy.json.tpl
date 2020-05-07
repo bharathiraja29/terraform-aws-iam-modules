@@ -42,7 +42,7 @@
             ],
             "Condition": {
                 "StringEquals": {
-                    "ec2:ResourceTag/ApplicationName": "8KAutomation"
+                    "ec2:ResourceTag/ApplicationName": "XYZ"
                 }
             }
         },
