@@ -20,3 +20,4 @@ override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
+aws ec2 run-instances --image-id ami-abc12345 --count 1 --instance-type t2.micro --key-name njm-test --subnet-id subnet-51d4577f --tag-specifications 'ResourceType=instance,Tags=[{Key=ApplicationName,Value=8KAutomation}]' 'ResourceType=volume,Tags=[{Key=ApplicationName,Value=8KAutomation}]' 
